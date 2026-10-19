@@ -1,6 +1,7 @@
 """Render clipped Seoul building footprints into transparent web map tiles."""
 from pathlib import Path
 import math
+import sys
 import geopandas as gpd
 import numpy as np
 from PIL import Image, ImageDraw
@@ -46,7 +47,8 @@ dong_union = d.geometry.union_all()
 building_geoms = b.geometry.values
 dong_geoms = d.geometry.values
 minlon, minlat, maxlon, maxlat = d.to_crs(4326).total_bounds
-for z in range(12, 18):
+min_zoom, max_zoom = (int(v) for v in sys.argv[1:3]) if len(sys.argv) >= 3 else (10, 17)
+for z in range(min_zoom, max_zoom + 1):
     x0, x1 = tile_x(minlon, z), tile_x(maxlon, z)
     y0, y1 = tile_y(maxlat, z), tile_y(minlat, z)
     total = 0
