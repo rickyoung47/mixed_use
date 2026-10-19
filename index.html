@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5f4ef" />
+  <meta name="description" content="서울시 법정동 경계, 건축물과 용도지역을 함께 살펴보는 지도" />
+  <title>서울 토지이용 믹스</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="서울 토지이용 믹스 홈"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span>FIELDNOTE <b>/ SEOUL</b></span></a>
+      <div class="top-meta"><span class="live-dot"></span> 공간 데이터 뷰어 <span class="meta-divider"></span> 2026.09 기준</div>
+      <button class="about-btn" id="aboutButton">데이터 안내 <span>↗</span></button>
+    </header>
+
+    <section class="intro">
+      <div class="intro-copy"><p class="eyebrow">URBAN FABRIC · SEOUL</p><h1>동네의 쓰임을<br /><em>겹쳐 보다.</em></h1><p class="dek">법정동 경계 위에 건축물 발자국과 도시지역 용도지역을 포개어<br class="desktop-only" /> 서울의 도시 조직을 살펴봅니다.</p></div>
+      <div class="stats" aria-label="지도 데이터 요약"><div><span class="stat-value" id="dongCount">—</span><span class="stat-label">법정동</span></div><div><span class="stat-value" id="buildingCount">—</span><span class="stat-label">건축물</span></div><div><span class="stat-value" id="zoneCount">—</span><span class="stat-label">용도구역</span></div></div>
+    </section>
+
+    <section class="map-section">
+      <div class="map-heading"><div><span class="section-kicker">01 / MAP EXPLORER</span><h2>서울의 도시 조직</h2></div><div class="map-note"><span class="compass">N</span> 서울특별시 · 법정동 기준</div></div>
+      <div class="map-frame">
+        <div id="map" role="application" aria-label="서울시 법정동, 건축물, 용도지역 지도"></div>
+        <div class="map-loading" id="loading"><span class="loader"></span><b>지도를 준비하고 있어요</b><small>공간 데이터를 불러오는 중</small></div>
+        <div class="map-tools"><button id="zoomAll" title="전체 범위 보기">⌗ <span>전체 보기</span></button><button id="locate" title="서울 전체 보기">↗</button></div>
+        <div class="map-credit">DATA · 서울시 공간정보</div>
+        <div class="map-sidebar">
+          <div class="side-card layers-card"><div class="card-title"><span>MAP LAYERS</span><span class="tiny-icon">◫</span></div>
+            <label class="layer-row"><input type="checkbox" id="toggleLand" checked /><span class="checkmark"></span><span class="swatch land-swatch"></span><span class="layer-text"><b>용도지역</b><small>도시지역 구분</small></span><span class="layer-state">ON</span></label>
+            <label class="layer-row"><input type="checkbox" id="toggleBuildings" checked /><span class="checkmark"></span><span class="swatch building-swatch"></span><span class="layer-text"><b>건축물</b><small>건축물 발자국</small></span><span class="layer-state">ON</span></label>
+            <label class="layer-row"><input type="checkbox" id="toggleDong" checked /><span class="checkmark"></span><span class="swatch dong-swatch"></span><span class="layer-text"><b>법정동 경계</b><small>건축물 중첩 지역</small></span><span class="layer-state">ON</span></label>
+          </div>
+          <div class="side-card legend-card"><div class="card-title"><span>LAND USE</span><span class="tiny-icon">⌖</span></div><div class="legend-items"><div><i class="legend-color res"></i><span>주거지역</span></div><div><i class="legend-color com"></i><span>상업지역</span></div><div><i class="legend-color ind"></i><span>공업지역</span></div><div><i class="legend-color green"></i><span>녹지지역</span></div><div><i class="legend-color other"></i><span>그 외</span></div></div></div>
+          <div class="side-hint"><span>＋</span> 지도를 확대하고<br />동네를 눌러 상세 정보를 확인하세요.</div>
+        </div>
+        <div class="map-scale"><span></span><small>1 km</small></div>
+      </div>
+      <div class="map-foot"><span><i class="foot-dot"></i> 건축물과 법정동 경계가 겹치는 범위만 표시</span><span>지도 위 요소를 눌러 속성 확인</span></div>
+    </section>
+
+    <footer><span>FIELDNOTE <b>/ SEOUL</b></span><span>공간 데이터 시각화 · 2026</span></footer>
+  </main>
+
+  <dialog id="aboutDialog"><div class="dialog-head"><span class="section-kicker">ABOUT THIS MAP</span><button id="closeDialog" aria-label="닫기">×</button></div><h3>데이터 안내</h3><p>서울시 법정동 경계, 건축물, 도시지역 용도지역 데이터를 함께 표시합니다. 지도는 법정동과 건축물이 실제로 겹치는 영역으로 제한됩니다.</p><dl><dt>법정동 경계</dt><dd>국가공간정보포털 · 2026년 9월</dd><dt>건축물</dt><dd>건축물통합정보 · 2026년 10월</dd><dt>용도지역</dt><dd>도시지역 용도지역 현황 · 2026년 9월</dd><dt>색상 기준</dt><dd>주거 노랑 · 상업 빨강 · 공업 파랑 · 녹지 초록 · 기타 연보라</dd></dl><small>원본 데이터를 법정동 경계 기준으로 잘라 표시했습니다. 건축물 명칭은 원자료 속성 기준입니다.</small></dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
