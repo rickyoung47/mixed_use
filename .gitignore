@@ -1,5 +1,6 @@
 .DS_Store
 .venv/
 __pycache__/
+.wrangler/
 *.pyc
 wrangler.toml.local
